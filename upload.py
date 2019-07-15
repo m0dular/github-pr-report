@@ -20,6 +20,9 @@ def main():
     p.add_argument(
         "-t", "--token", type=str,
         help="Absolute path to token file")
+    p.add_argument(
+        "-c", "--credentials", type=str,
+        help="Absolute path to credentials file")
     args = p.parse_args()
 
     # The ID and range of a sample spreadsheet.
@@ -31,7 +34,7 @@ def main():
     store = file.Storage(args.token)
     creds = store.get()
     if not creds or creds.invalid:
-        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
+        flow = client.flow_from_clientsecrets(args.credentials, SCOPES)
         creds = tools.run_flow(flow, store)
     service = build('sheets', 'v4', http=creds.authorize(Http()))
 
