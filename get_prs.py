@@ -64,12 +64,12 @@ def main():
 
     if not args.org:
         print("Error: org is required")
-        p.print_usage()
+        p.print_help()
         exit(1)
 
     if args.team and args.user:
         print("Error: mutually exclusive values team and user specified.")
-        p.print_usage()
+        p.print_help()
         exit(1)
 
     token = args.token if args.token else open(
