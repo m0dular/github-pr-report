@@ -12,7 +12,7 @@ The `upload.py` script can take the contents of the CSV and insert it into a Goo
 
 # Setup
 
-* Follow the GSheets [quickstart guide](https://developers.google.com/sheets/api/quickstart/python) for Python and save the `token.json` file for use with `upload.py`.
+* Follow the GSheets [quickstart guide](https://developers.google.com/sheets/api/quickstart/python) for Python and save the `token.json` and `credentials.json` files for use with `upload.py`.
 * Install [PyGithub](https://github.com/PyGithub/PyGithub) for Python 3
 * Create a Github OAuth token for your organization and optionally save it at `~/.pr_token`.
 
@@ -40,7 +40,7 @@ optional arguments:
 
 ## upload.py
 ```
-usage: upload.py [-h] [-f FILE] [-s SPREADSHEET] [-t TOKEN]
+usage: upload.py [-h] [-f FILE] [-s SPREADSHEET] [-t TOKEN] [-c CREDENTIALS]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -49,4 +49,6 @@ optional arguments:
                         ID of the Google Sheet to upload to
   -t TOKEN, --token TOKEN
                         Absolute path to token file
+  -c CREDENTIALS, --credentials CREDENTIALS
+                        Absolute path to credentials file
 ```
