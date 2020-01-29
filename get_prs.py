@@ -2,6 +2,7 @@
 
 from github import Github
 from os.path import expanduser
+from os import environ
 from datetime import datetime
 import csv
 import argparse
@@ -75,8 +76,8 @@ def main():
         "-o", "--org", type=str,
         help="Organization id. Required")
     p.add_argument(
-        "-t", "--team", type=int,
-        help="Numeric identifier of the team to query for")
+        "-t", "--team", type=str,
+        help="Comma separated string of teams to query for")
     p.add_argument(
         "-k", "--token", type=str,
         help="Token to use in api calls. Can be saved in ~/.pr_token")
@@ -112,16 +113,19 @@ def main():
     github = get_token(token)
 
     if args.team:
-        teams = github.get_organization(args.org).get_teams()
-        team = [t for t in teams if int(t.id) == int(args.team)]
+        users = {}
+        all_teams = github.get_organization(args.org).get_teams()
 
-        if not team:
-            print(
-                "Error: could not find team %s in org %s" %
-                (args.team, args.org))
-            exit(1)
+        for team in args.team.split(','):
+            team = [t for t in all_teams if int(t.id) == int(team)]
 
-        users = {m.login: m.name for m in team[0].get_members()}
+            if not team:
+                print(
+                    "Error: could not find team %s in org %s" %
+                    (args.team, args.org))
+                exit(1)
+
+            users.update({m.login: m.name for m in team[0].get_members()})
     elif args.user:
         users = args.user.split(',')
         query = ' '.join(['user:%s' % u for u in users])
@@ -132,6 +136,13 @@ def main():
         # For now, just use the login name for org-wide search
         query = ''
         users = {}
+
+    try:
+        exclude_users = environ['PR_EXCLUDE_USERS'].split(',')
+        for user in exclude_users:
+            users.pop(user)
+    except KeyError:
+        pass
 
     # Turn a single user into a list so we don't iterate over each character
     if users and isinstance(users, str):

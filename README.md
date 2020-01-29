@@ -6,7 +6,7 @@ Make management happy with answers to questions like:
 * How many PRs has Bob submitted in the past year?
 * What are the oldest open PRs submitted by our team?
 
-`get_prs.py` can geneate a CSV file with open or closed pull requests for a Github organiztion, team, or list of users.
+`get_prs.py` can geneate a CSV file with open or closed pull requests for a Github organiztion, team, or list of users.  Users can be excluded from the report by setting the `PR_EXCLUDE_USERS` environment variable to a comma separated list of Github user names
 
 The `upload.py` script can take the contents of the CSV and insert it into a Google Sheet.
 
@@ -19,14 +19,14 @@ The `upload.py` script can take the contents of the CSV and insert it into a Goo
 # Usage
 ## get_prs.py
 ```
-usage: get_prs.py [-h] [-u USER] [-o ORG] [-t TEAM] [-k TOKEN] [-s STATE]
+usage: PR_EXCLUDE_USERS=<users> get_prs.py [-h] [-u USER] [-o ORG] [-t TEAM] [-k TOKEN] [-s STATE]
                   [-b BEFORE] [-a AFTER]
 
 optional arguments:
   -h, --help            show this help message and exit
   -u USER, --user USER  Comma separated string of users to query for
   -o ORG, --org ORG     Organization id. Required
-  -t TEAM, --team TEAM  Numeric identifier of the team to query for
+  -t TEAM, --team TEAM  Comma separated string of teams to query for
   -k TOKEN, --token TOKEN
                         Token to use in api calls. Can be saved in ~/.pr_token
   -s STATE, --state STATE
@@ -36,6 +36,8 @@ optional arguments:
                         Get PRs created before DATE. Must by YYYY-MM-DD
   -a AFTER, --after AFTER
                         Get PRs created after DATE. Must by YYYY-MM-DD
+  -c, --codeowners      Include content of CODEOWNERS file in the report
+
 ```
 
 ## upload.py
